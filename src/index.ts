@@ -6,6 +6,7 @@ import { HOST, PORT } from "./contants";
 import saveBaseImage from "./utils/saveBaseImage";
 import saveFile from "./utils/saveFile";
 import saveAudio from "./utils/saveAudio";
+import { authMiddleware } from "./utils/authMiddleware";
 
 export const app = express();
 
@@ -15,7 +16,11 @@ const UPLOADS_DIR = path.join(__dirname, "uploads");
 
 fs.mkdir(UPLOADS_DIR, { recursive: true });
 
-app.post("/upload-image", async (req, res) => {
+app.get("/", (req, res) => {
+  res.send("Servidor de upload de arquivos está rodando!");
+});
+
+app.post("/upload-image", authMiddleware, async (req, res) => {
   const { file_id, data } = req.body;
   if (!file_id || !data) {
     res.status(400).send("Faltando file_id ou data");
@@ -31,7 +36,7 @@ app.post("/upload-image", async (req, res) => {
   }
 });
 
-app.post("/upload-file", async (req, res) => {
+app.post("/upload-file", authMiddleware, async (req, res) => {
   const { file_id, data, original_filename } = req.body;
   if (!file_id || !data) {
     res.status(400).send("Faltando file_id ou data");
@@ -47,7 +52,7 @@ app.post("/upload-file", async (req, res) => {
   }
 });
 
-app.post("/upload-audio", async (req, res) => {
+app.post("/upload-audio", authMiddleware, async (req, res) => {
   const { file_id, data, original_filename } = req.body;
   if (!file_id || !data) {
     res.status(400).send("Faltando file_id ou data");
@@ -63,7 +68,7 @@ app.post("/upload-audio", async (req, res) => {
   }
 });
 
-app.delete("/upload/:file_name", async (req, res) => {
+app.delete("/upload/:file_name", authMiddleware, async (req, res) => {
   const { file_name } = req.params;
   const filePath = path.join(UPLOADS_DIR, file_name);
   try {
