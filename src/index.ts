@@ -31,10 +31,10 @@ app.post("/upload-image", authMiddleware, async (req, res) => {
   if (!file_id || !data) {
     res.status(400).send("Faltando file_id ou data");
     return;
-  }  try {
+  }
+  try {
     const save = await saveBaseImage(file_id, data);
     // Adiciona o arquivo à fila para deleção automática em 1 minuto
-    fileQueue.addToQueue(save);
     res.send({ url: save });
   } catch (error: any) {
     res.status(500).send({
@@ -48,10 +48,9 @@ app.post("/upload-file", authMiddleware, async (req, res) => {
   if (!file_id || !data) {
     res.status(400).send("Faltando file_id ou data");
     return;
-  }  try {
+  }
+  try {
     const save = await saveFile(file_id, data, original_filename);
-    // Adiciona o arquivo à fila para deleção automática em 1 minuto
-    fileQueue.addToQueue(save);
     res.send({ url: save });
   } catch (error: any) {
     res.status(500).send({
@@ -65,10 +64,9 @@ app.post("/upload-audio", authMiddleware, async (req, res) => {
   if (!file_id || !data) {
     res.status(400).send("Faltando file_id ou data");
     return;
-  }  try {
+  }
+  try {
     const save = await saveAudio(file_id, data, original_filename);
-    // Adiciona o arquivo à fila para deleção automática em 1 minuto
-    fileQueue.addToQueue(save);
     res.send({ url: save });
   } catch (error: any) {
     res.status(500).send({
@@ -82,7 +80,6 @@ app.delete("/upload/:file_name", authMiddleware, async (req, res) => {
   const filePath = path.join(UPLOADS_DIR, file_name);
   try {
     await fs.unlink(filePath);
-    // Remove da fila de deleção automática se existir
     fileQueue.removeFromQueue(filePath);
     res.status(204).send();
   } catch (error) {
