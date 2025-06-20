@@ -58,7 +58,7 @@ app.post("/upload-file", authMiddleware, async (req, res) => {
     });
   }
 });
-
+// Teste
 app.post("/upload-audio", authMiddleware, async (req, res) => {
   const { file_id, data, original_filename } = req.body;
   if (!file_id || !data) {
