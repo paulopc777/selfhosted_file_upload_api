@@ -13,7 +13,7 @@ export default async function saveAudio(
 
   // Determine file extension
   const extension = getAudioExtension(data, originalFileName);
-  
+
   // Add extension to fileId
   const fileNameWithExtension = `${fileId}${extension}`;
 
@@ -26,9 +26,11 @@ export default async function saveAudio(
   // Check file size (15MB limit for audio files)
   const fileSizeInBytes = (cleanData.length * 3) / 4; // Approximate size from base64
   const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
-  
+
   if (fileSizeInBytes > maxSizeInBytes) {
-    throw new Error('Arquivo de áudio muito grande. Tamanho máximo permitido: 15MB');
+    throw new Error(
+      "Arquivo de áudio muito grande. Tamanho máximo permitido: 15MB"
+    );
   }
 
   // Write the base64 data to the file
@@ -51,47 +53,51 @@ function getAudioExtension(data: string, originalFileName?: string): string {
   if (match && match[1]) {
     const mimeType = match[1];
     switch (mimeType) {
-      case 'audio/aac':
-        return '.aac';
-      case 'audio/amr':
-        return '.amr';
-      case 'audio/mpeg':
-      case 'audio/mp3':
-        return '.mp3';
-      case 'audio/mp4':
-      case 'audio/m4a':
-        return '.m4a';
-      case 'audio/ogg':
-        return '.ogg';
+      case "audio/aac":
+        return ".aac";
+      case "audio/amr":
+        return ".amr";
+      case "audio/mpeg":
+      case "audio/mp3":
+        return ".mp3";
+      case "audio/mp4":
+      case "audio/m4a":
+        return ".m4a";
+      case "audio/ogg":
+        return ".ogg";
+      case "audio/mpeg":
+        return ".mpeg";
       default:
         break; // Continue to filename-based detection
     }
   }
-  
+
   // Try to get extension from original filename
   if (originalFileName) {
     const fileExtMatch = originalFileName.match(/\.([^.]+)$/);
     if (fileExtMatch) {
       const ext = fileExtMatch[1].toLowerCase();
-      const allowedExtensions = ['aac', 'amr', 'mp3', 'm4a', 'ogg'];
+      const allowedExtensions = ["aac", "amr", "mp3", "m4a", "ogg"];
       if (allowedExtensions.includes(ext)) {
         return `.${ext}`;
       }
     }
   }
-  
+
   // Try to infer from base64 data signatures
-  if (data.includes('ID3') || data.includes('LAME')) {
-    return '.mp3'; // MP3 signature
-  } else if (data.includes('OggS')) {
-    return '.ogg'; // OGG signature
-  } else if (data.includes('ftyp')) {
-    return '.m4a'; // M4A/MP4 signature
-  } else if (data.includes('#!AMR')) {
-    return '.amr'; // AMR signature
+  if (data.includes("ID3") || data.includes("LAME")) {
+    return ".mp3"; // MP3 signature
+  } else if (data.includes("OggS")) {
+    return ".ogg"; // OGG signature
+  } else if (data.includes("ftyp")) {
+    return ".m4a"; // M4A/MP4 signature
+  } else if (data.includes("#!AMR")) {
+    return ".amr"; // AMR signature
   }
-  
-  throw new Error('Tipo de arquivo de áudio não suportado. Apenas .aac, .amr, .mp3, .m4a e .ogg são aceitos.');
+
+  throw new Error(
+    "Tipo de arquivo de áudio não suportado. Apenas .aac, .amr, .mp3, .m4a e .ogg são aceitos."
+  );
 }
 
 /**
