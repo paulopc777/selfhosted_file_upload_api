@@ -17,7 +17,7 @@ const UPLOADS_DIR = path.join(__dirname, "uploads");
 fs.mkdir(UPLOADS_DIR, { recursive: true });
 
 app.get("/", (req, res) => {
-  res.send("Servidor de upload de arquivos está rodando!");
+  res.json("Servidor de upload de arquivos está rodando!");
 });
 
 app.post("/upload-image", authMiddleware, async (req, res) => {
