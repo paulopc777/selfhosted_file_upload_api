@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AUTH_TOKEN } from "../contants";
+import { AUTH_TOKEN } from "../config/contants";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;

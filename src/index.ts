@@ -2,12 +2,11 @@ import express from "express";
 import fs from "fs/promises";
 import path from "path";
 
-import { HOST, PORT } from "./contants";
+import { HOST, PORT } from "./config/contants";
 import saveBaseImage from "./utils/saveBaseImage";
 import saveFile from "./utils/saveFile";
 import saveAudio from "./utils/saveAudio";
-import { authMiddleware } from "./utils/authMiddleware";
-import { fileQueue } from "./fileQueue";
+import { authMiddleware } from "./middlewares/auth_middleware";
 
 export const app = express();
 
@@ -21,11 +20,6 @@ app.get("/", (req, res) => {
   res.send("Servidor de upload de arquivos está rodando!");
 });
 
-app.get("/queue-status", authMiddleware, (req, res) => {
-  const status = fileQueue.getQueueStatus();
-  res.send(status);
-});
-
 app.post("/upload-image", authMiddleware, async (req, res) => {
   const { file_id, data } = req.body;
   if (!file_id || !data) {
@@ -34,7 +28,6 @@ app.post("/upload-image", authMiddleware, async (req, res) => {
   }
   try {
     const save = await saveBaseImage(file_id, data);
-    // Adiciona o arquivo à fila para deleção automática em 1 minuto
     res.send({ url: save });
   } catch (error: any) {
     res.status(500).send({
@@ -58,7 +51,7 @@ app.post("/upload-file", authMiddleware, async (req, res) => {
     });
   }
 });
-// Teste
+
 app.post("/upload-audio", authMiddleware, async (req, res) => {
   const { file_id, data, original_filename } = req.body;
   if (!file_id || !data) {
@@ -80,7 +73,6 @@ app.delete("/upload/:file_name", authMiddleware, async (req, res) => {
   const filePath = path.join(UPLOADS_DIR, file_name);
   try {
     await fs.unlink(filePath);
-    fileQueue.removeFromQueue(filePath);
     res.status(204).send();
   } catch (error) {
     console.error("Erro ao deletar o arquivo:", error);
