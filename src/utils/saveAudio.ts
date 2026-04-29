@@ -65,6 +65,8 @@ function getAudioExtension(data: string, originalFileName?: string): string {
         return ".m4a";
       case "audio/ogg":
         return ".ogg";
+      case "audio/webm":
+        return ".webm";
       case "audio/mpeg":
         return ".mpeg";
       default:
@@ -77,7 +79,7 @@ function getAudioExtension(data: string, originalFileName?: string): string {
     const fileExtMatch = originalFileName.match(/\.([^.]+)$/);
     if (fileExtMatch) {
       const ext = fileExtMatch[1].toLowerCase();
-      const allowedExtensions = ["aac", "amr", "mp3", "m4a", "ogg"];
+      const allowedExtensions = ["aac", "amr", "mp3", "m4a", "ogg", "webm"];
       if (allowedExtensions.includes(ext)) {
         return `.${ext}`;
       }
@@ -96,7 +98,7 @@ function getAudioExtension(data: string, originalFileName?: string): string {
   }
 
   throw new Error(
-    "Tipo de arquivo de áudio não suportado. Apenas .aac, .amr, .mp3, .m4a e .ogg são aceitos."
+    "Tipo de arquivo de áudio não suportado. Apenas .aac, .amr, .mp3, .m4a, .ogg e .webm são aceitos."
   );
 }
 
