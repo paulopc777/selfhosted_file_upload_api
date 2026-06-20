@@ -4,7 +4,7 @@ import db from '../src/database/drizzle'
 import { bucketsTable } from '../src/database/schema'
 import { eq } from 'drizzle-orm'
 
-describe('Server Upload image test', () => {
+describe('Server Delete image test', () => {
     const url = 'http://127.0.0.1:5050'
     const token = 'cat'
     const bucketName = 'bucket1'
@@ -56,5 +56,24 @@ describe('Server Upload image test', () => {
 
         expect(response.status).toBe(200)
         expect(response.data).toHaveProperty('url')
+    })
+
+    it('get image after upload should return 200', async () => {
+        const image_response = await axios.get(`${url}/uploads/${image.file_id}.png`, {})
+        expect(image_response.status).toBe(200)
+    })
+
+    it('delete image should return 204', async () => {
+        const response = await axios.delete(`${url}/${bucketId}/upload/${image.file_id}.png`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        expect(response.status).toBe(204)
+    })
+
+    it('get image after delete should return 404', async () => {
+        const response = await axios.get(`${url}/uploads/${image.file_id}.png`, {}).catch((error) => error.response)
+        expect(response.status).toBe(404)
     })
 })

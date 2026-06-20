@@ -20,6 +20,5 @@ export const authMiddleware = (req: FastifyRequest, res: FastifyReply, done: () 
         res.status(401).send({ error: 'Token de autorização inválido' })
         return
     }
-    console.log('pass auth')
     done()
 }
