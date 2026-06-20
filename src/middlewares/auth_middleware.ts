@@ -1,23 +1,25 @@
-import { Request, Response, NextFunction } from "express";
-import { AUTH_TOKEN } from "../config/contants";
+import { AUTH_TOKEN } from '../config/contants'
+import { FastifyRequest, FastifyReply } from 'fastify'
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
-  const authHeader = req.headers.authorization;
-  
-  if (!authHeader) {
-    res.status(401).json({ error: "Token de autorização não fornecido" });
-    return;
-  }
+export const authMiddleware = (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+    const authHeader = req.headers['authorization']
 
-  // Extract token from "Bearer TOKEN" or just "TOKEN"
-  const token = authHeader.startsWith("Bearer ") 
-    ? authHeader.substring(7) 
-    : authHeader;
+    if (!authHeader) {
+        res.status(401).send({
+            error: 'Token de autorização não fornecido',
+        })
+        return
+    }
 
-  if (token !== AUTH_TOKEN) {
-    res.status(401).json({ error: "Token de autorização inválido" });
-    return;
-  }
+    // Extract token from "Bearer TOKEN" or just "TOKEN"
+    const token = authHeader.startsWith('Bearer ')
+        ? authHeader.substring(7)
+        : authHeader
 
-  next();
-};
+    if (token !== AUTH_TOKEN) {
+        res.status(401).send({ error: 'Token de autorização inválido' })
+        return
+    }
+    console.log('pass auth')
+    done()
+}
