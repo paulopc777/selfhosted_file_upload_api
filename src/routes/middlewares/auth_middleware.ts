@@ -1,4 +1,4 @@
-import { AUTH_TOKEN } from '../config/contants'
+import { AUTH_TOKEN } from '../../config/contants'
 import { FastifyRequest, FastifyReply } from 'fastify'
 
 export const authMiddleware = (req: FastifyRequest, res: FastifyReply, done: () => void) => {
