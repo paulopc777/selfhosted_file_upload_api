@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 import fs from 'fs/promises'
 import path from 'path'
-import { authMiddleware } from '../middlewares/auth_middleware'
+import { authMiddleware } from './middlewares/auth_middleware'
 import FileDeleteController from '../controllers/FileDelete.controller'
 import FilesRepository from '../database/repository/files.repository'
 

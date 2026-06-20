@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { authMiddleware } from '../middlewares/auth_middleware'
+import { authMiddleware } from './middlewares/auth_middleware'
 import Type, { Static } from 'typebox'
 import FileSaveController from '../controllers/FileSave.controller'
 import FilesRepository from '../database/repository/files.repository'
