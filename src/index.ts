@@ -30,6 +30,7 @@ app.post("/upload-image", authMiddleware, async (req, res) => {
     const save = await saveBaseImage(file_id, data);
     res.send({ url: save });
   } catch (error: any) {
+    console.log(error);
     res.status(500).send({
       error: error.message || "Erro ao salvar a imagem",
     });
@@ -69,7 +70,7 @@ app.post("/upload-audio", authMiddleware, async (req, res) => {
 });
 
 app.delete("/upload/:file_name", authMiddleware, async (req, res) => {
-  const { file_name } = req.params;
+  const { file_name } = req.params as any;
   const filePath = path.join(UPLOADS_DIR, file_name);
   try {
     await fs.unlink(filePath);
@@ -82,6 +83,10 @@ app.delete("/upload/:file_name", authMiddleware, async (req, res) => {
 
 app.use("/uploads", express.static(UPLOADS_DIR));
 
-app.listen(PORT, HOST, () =>
-  console.log(`Servidor rodando em http://${HOST}:${PORT}/`)
-);
+app.listen(PORT, HOST, (err) => {
+  if (err) {
+    console.error("Erro ao iniciar o servidor:", err);
+    process.exit(1);
+  }
+  console.log(`Servidor rodando em http://${HOST}:${PORT}/`);
+});

@@ -41,6 +41,7 @@ function getFileExtension(data: string): string {
   
   if (match && match[1]) {
     const mimeType = match[1];
+    console.log(mimeType)
     switch (mimeType) {
       case 'image/png':
         return '.png';
@@ -49,8 +50,10 @@ function getFileExtension(data: string): string {
         return '.jpeg';
       case 'image/gif':
         return '.gif';
+      case 'image/webp':
+        return '.webp';
       default:
-        throw new Error('Unsupported file type. Only JPEG, PNG, and GIF are accepted.');
+        throw new Error('Unsupported file type. Only JPEG, PNG, GIF, and WEBP are accepted.');
     }
   }
   
@@ -64,7 +67,7 @@ function getFileExtension(data: string): string {
     return '.gif'; // GIF signature
   }
   
-  throw new Error('Unsupported file type. Only JPEG, PNG, and GIF are accepted.');
+  throw new Error('Unsupported file type. Only JPEG, PNG, GIF, and WEBP are accepted.');
 }
 
 /**
